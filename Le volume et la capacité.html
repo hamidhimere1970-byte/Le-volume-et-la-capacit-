@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Volume et la Capacité — Cours interactif</title>
+<style>
+  :root{
+    --bleu:#1565c0;
+    --bleu-fonce:#0d47a1;
+    --bleu-clair:#e3f2fd;
+    --turquoise:#00897b;
+    --vert:#2e7d32;
+    --vert-clair:#e8f5e9;
+    --rouge:#c62828;
+    --rouge-clair:#ffebee;
+    --gris:#37474f;
+    --fond:#f4f7fb;
+    --carte:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.65;
+  }
+  header{
+    background:linear-gradient(135deg,#1565c0,#00897b);
+    color:#fff;
+    padding:30px 20px;
+    text-align:center;
+    box-shadow:0 4px 18px rgba(0,0,0,.18);
+  }
+  header h1{margin:0;font-size:1.75rem;letter-spacing:.3px;}
+  header p{margin:8px 0 0;opacity:.92;font-size:.95rem;}
+
+  /* ---------- Navigation principale ---------- */
+  nav.main-nav{
+    display:flex;justify-content:center;gap:14px;
+    padding:14px;background:#fff;
+    position:sticky;top:0;z-index:60;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+  }
+  .nav-btn{
+    border:2px solid transparent;
+    background:#eceff1;color:var(--gris);
+    padding:11px 26px;border-radius:40px;
+    font-size:1rem;font-weight:600;cursor:pointer;
+    transition:.25s;font-family:inherit;
+  }
+  .nav-btn:hover{background:#dde5ec;}
+  .nav-btn.active{
+    background:linear-gradient(135deg,#1565c0,#00897b);
+    color:#fff;box-shadow:0 4px 12px rgba(21,101,192,.35);
+  }
+
+  main{max-width:960px;margin:0 auto;padding:24px 16px 60px;}
+  .main-section{display:none;animation:fade .35s ease;}
+  .main-section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+  /* ---------- Cartes de cours ---------- */
+  .card{
+    background:var(--carte);border-radius:16px;
+    padding:22px 24px;margin-bottom:22px;
+    box-shadow:0 3px 14px rgba(0,0,0,.07);
+    border-left:6px solid var(--bleu);
+  }
+  .card.turquoise{border-left-color:var(--turquoise);}
+  .card.vert{border-left-color:var(--vert);}
+  .card h2{
+    margin:0 0 14px;font-size:1.22rem;color:var(--bleu-fonce);
+    display:flex;align-items:center;gap:10px;
+  }
+  .card h3{margin:18px 0 8px;font-size:1.05rem;color:var(--turquoise);}
+  .badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,#1565c0,#00897b);
+    color:#fff;font-size:.9rem;font-weight:700;flex:none;
+  }
+  ul.clean{list-style:none;padding:0;margin:0;}
+  ul.clean li{
+    padding:8px 0 8px 30px;position:relative;
+  }
+  ul.clean li::before{
+    content:"▸";position:absolute;left:8px;color:var(--turquoise);
+    font-weight:700;font-size:1.05rem;
+  }
+  .formule{
+    display:inline-block;background:#fff8e1;border:1.5px dashed #ffb300;
+    border-radius:10px;padding:6px 16px;font-weight:700;
+    color:#e65100;margin:6px 0;font-size:1.05rem;
+  }
+  .cle{
+    display:inline-block;background:var(--bleu-clair);color:var(--bleu-fonce);
+    border-radius:6px;padding:1px 8px;font-weight:700;
+  }
+
+  /* ---------- Tableaux ---------- */
+  table.units{
+    width:100%;border-collapse:collapse;margin:12px 0;text-align:center;
+    font-size:.95rem;
+  }
+  table.units th,table.units td{
+    border:1px solid #cfd8dc;padding:9px 6px;
+  }
+  table.units th{background:var(--bleu);color:#fff;font-weight:600;}
+  table.units td{background:#fafdff;font-weight:600;color:var(--bleu-fonce);}
+  table.units td.vide{background:#fff;}
+
+  /* ---------- Figures ---------- */
+  .fig-row{
+    display:flex;align-items:flex-end;justify-content:center;
+    gap:22px;flex-wrap:wrap;margin:16px 0;
+  }
+  .fig-svg{width:118px;height:auto;}
+  .fig-svg.wide{width:150px;}
+  .arrow{font-size:2.1rem;color:var(--bleu);align-self:center;font-weight:700;}
+  .inst-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:14px;margin-top:14px;
+  }
+  .inst-card{
+    background:#fafdff;border:1.5px solid #d6e6f5;border-radius:12px;
+    padding:12px 6px;text-align:center;transition:.25s;
+  }
+  .inst-card:hover{transform:translateY(-4px);box-shadow:0 6px 16px rgba(21,101,192,.15);}
+  .inst-card svg{width:80px;height:auto;}
+  .inst-card span{
+    display:block;margin-top:8px;font-weight:700;font-size:.82rem;
+    color:var(--bleu-fonce);
+  }
+  .fig-caption{
+    text-align:center;font-size:.88rem;color:#607d8b;
+    font-style:italic;margin-top:4px;
+  }
+  .solid-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;margin-top:14px;
+  }
+  .solid-card{
+    background:#fafdff;border:1.5px solid #d6e6f5;border-radius:12px;
+    padding:12px;text-align:center;
+  }
+  .solid-card svg{width:110px;height:auto;}
+  .solid-card h4{margin:6px 0 4px;color:var(--bleu-fonce);font-size:.95rem;}
+
+  /* ---------- Sous-navigation (Révision) ---------- */
+  .sub-nav{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    margin-bottom:22px;
+  }
+  .sub-btn{
+    border:2px solid var(--bleu);background:#fff;color:var(--bleu);
+    padding:9px 18px;border-radius:30px;cursor:pointer;
+    font-weight:600;font-size:.9rem;transition:.22s;font-family:inherit;
+  }
+  .sub-btn:hover{background:var(--bleu-clair);}
+  .sub-btn.active{background:var(--bleu);color:#fff;}
+  .sub-section{display:none;animation:fade .3s ease;}
+  .sub-section.active{display:block;}
+
+  /* ---------- Questions ---------- */
+  .q-card{
+    background:#fff;border-radius:14px;padding:18px 20px;
+    margin-bottom:16px;box-shadow:0 3px 12px rgba(0,0,0,.06);
+    border:1.5px solid #e6eef6;
+  }
+  .q-text{font-size:1rem;margin-bottom:12px;font-weight:500;}
+  .q-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:50%;background:var(--bleu);
+    color:#fff;font-size:.82rem;font-weight:700;margin-right:8px;
+    flex:none;
+  }
+  .vf-btns,.qcm-opts{display:flex;flex-wrap:wrap;gap:10px;}
+  .btn-vf,.btn-opt{
+    border:2px solid #cfd8dc;background:#fff;border-radius:9px;
+    padding:8px 18px;cursor:pointer;font-size:.92rem;font-weight:600;
+    color:var(--gris);transition:.2s;font-family:inherit;
+  }
+  .btn-vf:hover,.btn-opt:hover{border-color:var(--bleu);background:var(--bleu-clair);}
+  .btn-opt{display:block;width:100%;text-align:left;padding:10px 16px;}
+  .btn-vf.ok,.btn-opt.ok{background:var(--vert-clair);border-color:var(--vert);color:var(--vert);}
+  .btn-vf.ko,.btn-opt.ko{background:var(--rouge-clair);border-color:var(--rouge);color:var(--rouge);}
+  .btn-vf:disabled,.btn-opt:disabled{cursor:default;opacity:.85;}
+
+  .feedback{margin-top:11px;font-size:.9rem;font-weight:600;display:none;
+    padding:9px 14px;border-radius:9px;}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--vert-clair);color:var(--vert);}
+  .feedback.bad{background:var(--rouge-clair);color:var(--rouge);}
+  .feedback.info{background:var(--bleu-clair);color:var(--bleu-fonce);}
+
+  .blank{
+    border:none;border-bottom:2px solid var(--bleu);
+    background:#f5faff;font-family:inherit;font-size:.98rem;
+    padding:3px 8px;margin:0 4px;border-radius:5px 5px 0 0;
+    min-width:110px;text-align:center;font-weight:600;color:var(--bleu-fonce);
+  }
+  .blank:focus{outline:none;background:#e3f2fd;border-bottom-color:var(--turquoise);}
+  .blank.ok{background:var(--vert-clair);border-bottom-color:var(--vert);color:var(--vert);}
+  .blank.ko{background:var(--rouge-clair);border-bottom-color:var(--rouge);color:var(--rouge);}
+
+  .row-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .btn-check,.btn-reveal{
+    border:none;border-radius:9px;padding:9px 20px;cursor:pointer;
+    font-weight:600;font-size:.9rem;font-family:inherit;transition:.2s;
+  }
+  .btn-check{background:var(--bleu);color:#fff;}
+  .btn-check:hover{background:var(--bleu-fonce);}
+  .btn-reveal{background:#fff3e0;color:#e65100;border:2px solid #ffcc80;}
+  .btn-reveal:hover{background:#ffe0b2;}
+
+  .answer-box{
+    display:none;margin-top:12px;padding:12px 16px;border-radius:10px;
+    background:linear-gradient(135deg,#e8f5e9,#e3f2fd);
+    border-left:5px solid var(--vert);font-size:.95rem;color:#1b5e20;
+  }
+  .answer-box.show{display:block;animation:fade .3s ease;}
+  .answer-box strong{color:var(--vert);}
+
+  .score-bar{
+    text-align:center;font-weight:700;color:var(--bleu-fonce);
+    background:var(--bleu-clair);border-radius:12px;padding:12px;
+    margin-bottom:18px;font-size:1rem;
+  }
+  footer{
+    text-align:center;padding:26px 16px;color:#90a4ae;font-size:.85rem;
+  }
+  @media (max-width:560px){
+    header h1{font-size:1.3rem;}
+    .nav-btn{padding:10px 16px;font-size:.9rem;}
+    .card{padding:18px 16px;}
+    .fig-svg{width:96px;}
+    .blank{min-width:80px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>💧 Le Volume et la Capacité</h1>
+  <p>Physique — Cours interactif : notions, unités, mesure et calcul du volume</p>
+</header>
+
+<nav class="main-nav">
+  <button class="nav-btn active" data-main="explication">📘 Explication</button>
+  <button class="nav-btn" data-main="revision">📝 Révision</button>
+</nav>
+
+<main>
+
+<!-- ============================================================
+     SECTION 1 : EXPLICATION
+============================================================ -->
+<section id="explication" class="main-section active">
+
+  <!-- 1. Notion -->
+  <div class="card">
+    <h2><span class="badge">1</span> Notion de volume et de capacité</h2>
+    <ul class="clean">
+      <li>Le <strong>volume</strong> d'un corps (solide, liquide ou gazeux) est <strong>l'espace qu'il occupe</strong>.</li>
+      <li>La <strong>capacité</strong> est le <strong>volume maximal</strong> qu'un récipient peut contenir.</li>
+      <li>On symbolise le volume par : <span class="cle">V</span></li>
+      <li>L'unité internationale de volume est le <strong>mètre cube</strong>, son symbole est : <span class="cle">m³</span></li>
+      <li>Pour les liquides, on utilise souvent les unités de capacité : le <strong>litre (L)</strong>, ses multiples et ses sous-multiples.</li>
+    </ul>
+  </div>
+
+  <!-- 2. Unités -->
+  <div class="card turquoise">
+    <h2><span class="badge">2</span> Unités de volume et de capacité</h2>
+
+    <h3>Unités de volume</h3>
+    <table class="units">
+      <tr><th>m³</th><th>dm³</th><th>cm³</th><th>mm³</th></tr>
+      <tr><td>mètre cube</td><td>décimètre cube</td><td>centimètre cube</td><td>millimètre cube</td></tr>
+    </table>
+
+    <h3>Unités de capacité</h3>
+    <table class="units">
+      <tr><th>hL</th><th>daL</th><th>L</th><th>dL</th><th>cL</th><th>mL</th></tr>
+      <tr><td>hectolitre</td><td>décalitre</td><td>litre</td><td>décilitre</td><td>centilitre</td><td>millilitre</td></tr>
+    </table>
+
+    <h3>Correspondances à retenir</h3>
+    <ul class="clean">
+      <li><span class="formule">1 dm³ = 1 L</span></li>
+      <li><span class="formule">1 cm³ = 1 mL</span></li>
+      <li><span class="formule">1 m³ = 1000 L</span></li>
+    </ul>
+  </div>
+
+  <!-- 3. Instruments -->
+  <div class="card vert">
+    <h2><span class="badge">3</span> Instruments de mesure</h2>
+    <p>Pour mesurer le volume d'un <strong>liquide</strong>, on utilise un <strong>récipient gradué</strong> :</p>
+
+    <div class="inst-grid">
+      <div class="inst-card">
+        <svg viewBox="0 0 110 155">
+          <path d="M30 22 L30 128 Q30 136 38 136 L72 136 Q80 136 80 128 L80 22"
+                fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M30 22 Q24 15 32 12" fill="none" stroke="#2c3e50" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="30" y1="105" x2="55" y2="105" stroke="#2c3e50" stroke-width="1.6"/>
+          <line x1="30" y1="80" x2="55" y2="80" stroke="#2c3e50" stroke-width="1.6"/>
+          <line x1="30" y1="55" x2="55" y2="55" stroke="#2c3e50" stroke-width="1.6"/>
+          <text x="26" y="109" text-anchor="end" font-size="11" fill="#2c3e50">50</text>
+          <text x="26" y="84" text-anchor="end" font-size="11" fill="#2c3e50">100</text>
+          <text x="26" y="59" text-anchor="end" font-size="11" fill="#2c3e50">150</text>
+        </svg>
+        <span>Bécher</span>
+      </div>
+
+      <div class="inst-card">
+        <svg viewBox="0 0 110 155">
+          <path d="M30 20 L80 20 L62 95 L48 95 Z" fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5" stroke-linejoin="round"/>
+          <line x1="37" y1="50" x2="55" y2="50" stroke="#2c3e50" stroke-width="1.4"/>
+          <line x1="41" y1="70" x2="57" y2="70" stroke="#2c3e50" stroke-width="1.4"/>
+          <line x1="44" y1="88" x2="58" y2="88" stroke="#2c3e50" stroke-width="1.4"/>
+          <line x1="55" y1="95" x2="55" y2="128" stroke="#2c3e50" stroke-width="2.5"/>
+          <ellipse cx="55" cy="131" rx="25" ry="6" fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5"/>
+        </svg>
+        <span>Verre à pied</span>
+      </div>
+
+      <div class="inst-card">
+        <svg viewBox="0 0 110 155">
+          <path d="M42 20 L42 45 L22 128 Q20 136 30 136 L80 136 Q90 136 88 128 L68 45 L68 20"
+                fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5" stroke-linejoin="round"/>
+          <line x1="35" y1="75" x2="53" y2="75" stroke="#2c3e50" stroke-width="1.4"/>
+          <line x1="30" y1="95" x2="50" y2="95" stroke="#2c3e50" stroke-width="1.4"/>
+          <line x1="25" y1="115" x2="47" y2="115" stroke="#2c3e50" stroke-width="1.4"/>
+          <text x="55" y="79" font-size="10" fill="#2c3e50">150</text>
+          <text x="52" y="99" font-size="10" fill="#2c3e50">100</text>
+          <text x="49" y="119" font-size="10" fill="#2c3e50">50</text>
+        </svg>
+        <span>Erlenmeyer</span>
+      </div>
+
+      <div class="inst-card">
+        <svg viewBox="0 0 110 155">
+          <rect x="48" y="20" width="14" height="52" fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5"/>
+          <circle cx="55" cy="100" r="30" fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5"/>
+          <line x1="48" y1="38" x2="62" y2="38" stroke="#2c3e50" stroke-width="2"/>
+          <text x="55" y="106" text-anchor="middle" font-size="13" font-weight="bold" fill="#1565c0">250 mL</text>
+        </svg>
+        <span>Fiole jaugée</span>
+      </div>
+
+      <div class="inst-card">
+        <svg viewBox="0 0 110 155">
+          <rect x="40" y="20" width="30" height="110" rx="3" fill="#eaf4ff" stroke="#2c3e50" stroke-width="2.5"/>
+          <path d="M40 20 L33 12" stroke="#2c3e50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <line x1="40" y1="110" x2="62" y2="110" stroke="#2c3e50" stroke-width="1.6"/>
+          <line x1="40" y1="85" x2="62" y2="85" stroke="#2c3e50" stroke-width="1.6"/>
+          <line x1="40" y1="60" x2="62" y2="60" stroke="#2c3e50" stroke-width="1.6"/>
+          <text x="36" y="114" text-anchor="end" font-size="11" fill="#2c3e50">50</text>
+          <text x="36" y="89" text-anchor="end" font-size="11" fill="#2c3e50">100</text>
+          <text x="36" y="64" text-anchor="end" font-size="11" fill="#2c3e50">150</text>
+          <path d="M28 130 L82 130 L76 145 L34 145 Z" fill="#eceff1" stroke="#2c3e50" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <span>Éprouvette</span>
+      </div>
+    </div>
+
+    <p style="margin-top:16px;text-align:center;font-weight:700;color:var(--bleu-fonce);">
+      👉 Pour plus de <strong>précision</strong>, on utilise l'<strong>éprouvette graduée</strong>.
+    </p>
+  </div>
+
+  <!-- 4. Utilisation de l'éprouvette -->
+  <div class="card">
+    <h2><span class="badge">4</span> Utilisation de l'éprouvette graduée</h2>
+
+    <h3>a) Manipulation</h3>
+    <ul class="clean">
+      <li>Poser l'éprouvette sur une table bien <strong>horizontale</strong>.</li>
+      <li>Verser doucement le liquide dans l'éprouvette.</li>
+      <li>Placer l'<strong>œil au même niveau</strong> que la surface libre du liquide (pour éviter l'erreur de parallaxe).</li>
+      <li>Lire la graduation qui coïncide avec la <strong>surface libre</strong> du liquide.</li>
+    </ul>
+
+    <h3>b) Observation et interprétation</h3>
+    <div class="fig-row">
+      <div id="fig-lecture"></div>
+    </div>
+    <p class="fig-caption">Lecture du volume dans une éprouvette graduée</p>
+
+    <ul class="clean" style="margin-top:12px;">
+      <li>L'unité de mesure inscrite sur l'éprouvette est : <span class="cle">mL</span></li>
+      <li>Le volume correspondant à une division est : <span class="formule">15 mL − 10 mL = 1 mL</span>
+          <em>(il y a 5 divisions entre 10 et 15)</em></li>
+      <li>Le volume du liquide est : <span class="formule">V = 10 mL + (2 × 1 mL) = 12 mL</span></li>
+    </ul>
+
+    <h3>c) Conclusion</h3>
+    <p>Pour effectuer une mesure de volume avec une éprouvette graduée, il faut :</p>
+    <ul class="clean">
+      <li><strong>Déterminer</strong> le volume qui correspond à une division.</li>
+      <li><strong>Déterminer</strong> la graduation qui coïncide avec la surface libre du liquide.</li>
+    </ul>
+  </div>
+
+  <!-- 5. Solide de forme quelconque -->
+  <div class="card turquoise">
+    <h2><span class="badge">5</span> Volume d'un solide de forme quelconque</h2>
+
+    <h3>a) Expérience</h3>
+    <div class="fig-row">
+      <div id="fig-deplacement"></div>
+    </div>
+    <p class="fig-caption">Mesure du volume d'un solide par déplacement d'eau</p>
+
+    <h3>b) Observation et interprétation</h3>
+    <ul class="clean">
+      <li>Le volume correspondant à une division est : <span class="formule">20 mL − 10 mL = 2 mL</span> <em>(5 divisions)</em></li>
+      <li>Le volume V₁ du liquide seul : <span class="cle">V₁ = 20 mL</span></li>
+      <li>Le volume V₂ (liquide + solide) : <span class="cle">V₂ = 30 mL + (3 × 2 mL) = 36 mL</span></li>
+      <li>Le volume V du solide est :
+        <span class="formule">V = V₂ − V₁ = 36 mL − 20 mL = 16 mL</span></li>
+    </ul>
+
+    <h3>c) Conclusion — Méthode du déplacement de liquide</h3>
+    <ul class="clean">
+      <li>On verse un certain volume d'eau (V₁) dans une éprouvette graduée.</li>
+      <li>On place le solide dans l'éprouvette contenant l'eau et on lit le nouveau volume (V₂).</li>
+      <li>On calcule le volume du solide : <span class="formule">V = V₂ − V₁</span></li>
+    </ul>
+  </div>
+
+  <!-- 6. Solide de forme géométrique simple -->
+  <div class="card vert">
+    <h2><span class="badge">6</span> Volume d'un solide de forme géométrique simple</h2>
+    <p>Le volume se mesure par <strong>déplacement d'eau</strong> ou se <strong>calcule</strong> à partir d'une formule mathématique :</p>
+
+    <div class="solid-grid">
+      <div class="solid-card">
+        <svg viewBox="0 0 120 120">
+          <path d="M30 45 L75 45 L75 90 L30 90 Z" fill="#e3f2fd" stroke="#2c3e50" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M30 45 L48 27 L93 27 L75 45" fill="#bbdefb" stroke="#2c3e50" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M75 45 L93 27 L93 72 L75 90" fill="#90caf9" stroke="#2c3e50" stroke-width="2" stroke-linejoin="round"/>
+          <text x="52" y="106" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">c</text>
+          <text x="20" y="72" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">c</text>
+          <text x="92" y="100" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">c</text>
+        </svg>
+        <h4>Cube</h4>
+        <span class="formule">V = c × c × c</span>
+      </div>
+
+      <div class="solid-card">
+        <svg viewBox="0 0 120 120">
+          <path d="M18 55 L82 55 L82 90 L18 90 Z" fill="#e3f2fd" stroke="#2c3e50" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M18 55 L36 37 L100 37 L82 55" fill="#bbdefb" stroke="#2c3e50" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M82 55 L100 37 L100 72 L82 90" fill="#90caf9" stroke="#2c3e50" stroke-width="2" stroke-linejoin="round"/>
+          <text x="50" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">L</text>
+          <text x="10" y="76" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">l</text>
+          <text x="96" y="98" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">h</text>
+        </svg>
+        <h4>Parallélépipède rectangle</h4>
+        <span class="formule">V = L × l × h</span>
+      </div>
+
+      <div class="solid-card">
+        <svg viewBox="0 0 120 120">
+          <ellipse cx="60" cy="32" rx="30" ry="10" fill="#bbdefb" stroke="#2c3e50" stroke-width="2"/>
+          <path d="M30 32 L30 88 M90 32 L90 88" stroke="#2c3e50" stroke-width="2"/>
+          <ellipse cx="60" cy="88" rx="30" ry="10" fill="#90caf9" stroke="#2c3e50" stroke-width="2"/>
+          <line x1="60" y1="32" x2="90" y2="32" stroke="#e53935" stroke-width="1.8" stroke-dasharray="4 3"/>
+          <text x="76" y="26" text-anchor="middle" font-size="12" font-weight="bold" fill="#c62828">r</text>
+          <line x1="103" y1="32" x2="103" y2="88" stroke="#c62828" stroke-width="1.8"/>
+          <text x="111" y="63" text-anchor="middle" font-size="12" font-weight="bold" fill="#c62828">h</text>
+        </svg>
+        <h4>Cylindre</h4>
+        <span class="formule">V = π × r² × h</span>
+      </div>
+    </div>
+
+    <p style="margin-top:14px;text-align:center;">Avec <span class="cle">π = 3,14</span></p>
+  </div>
+
+  <!-- Application -->
+  <div class="card">
+    <h2><span class="badge">★</span> Application — À toi de jouer</h2>
+    <p>Pour mesurer le volume d'un corps solide, on réalise l'expérience suivante : on verse un peu d'eau dans une éprouvette, puis on introduit un corps solide dans celle-ci (voir la figure ci-contre).</p>
+    <div class="fig-row">
+      <div id="fig-exercice"></div>
+    </div>
+    <p class="fig-caption">Éprouvette 1 : eau seule &nbsp;|&nbsp; Éprouvette 2 : eau + solide</p>
+
+    <ol style="margin-top:14px;">
+      <li>Quel est le volume qui correspond à chaque division graduée ?</li>
+      <li>Indiquer le volume d'eau contenu dans l'éprouvette.</li>
+      <li>Déduire le volume du corps solide.</li>
+    </ol>
+
+    <div class="row-btns">
+      <button class="btn-reveal" onclick="toggleAnswer('app-sol')">💡 Afficher la solution</button>
+    </div>
+    <div class="answer-box" id="app-sol">
+      <strong>1)</strong> Entre 20 mL et 40 mL il y a 10 divisions, donc une division correspond à
+      (40 − 20) ÷ 10 = <strong>2 mL</strong>.<br>
+      <strong>2)</strong> Le volume d'eau seul : <strong>V₁ = 30 mL</strong>.<br>
+      <strong>3)</strong> Le volume (eau + solide) : <strong>V₂ = 44 mL</strong>.<br>
+      Donc le volume du solide : V = V₂ − V₁ = 44 − 30 = <strong>14 mL</strong>.
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     SECTION 2 : RÉVISION
+============================================================ -->
+<section id="revision" class="main-section">
+
+  <div class="sub-nav">
+    <button class="sub-btn active" data-sub="vf">① Vrai ou Faux</button>
+    <button class="sub-btn" data-sub="qcm">② Choix multiple</button>
+    <button class="sub-btn" data-sub="fill">③ Compléter</button>
+    <button class="sub-btn" data-sub="short">④ Réponse courte</button>
+  </div>
+
+  <div class="sub-section active" id="sub-vf">
+    <div class="score-bar">Coche « Vrai » ou « Faux » pour chaque affirmation.</div>
+    <div id="vf-list"></div>
+  </div>
+
+  <div class="sub-section" id="sub-qcm">
+    <div class="score-bar">Choisis la bonne réponse parmi les propositions.</div>
+    <div id="qcm-list"></div>
+  </div>
+
+  <div class="sub-section" id="sub-fill">
+    <div class="score-bar">Complète les phrases, puis clique sur « Vérifier ».</div>
+    <div id="fill-list"></div>
+  </div>
+
+  <div class="sub-section" id="sub-short">
+    <div class="score-bar">Réfléchis, écris ta réponse, puis clique sur « Afficher la réponse ».</div>
+    <div id="short-list"></div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>© Cours interactif — Le Volume et la Capacité · Physique</footer>
+
+<script>
+/* ============================================================
+   1. GÉNÉRATEUR D'ÉPROUVETTES GRADUÉES (SVG)
+============================================================ */
+function cylinderSVG(cfg){
+  const labels = cfg.labels;
+  const subs   = cfg.subs || 5;
+  const top    = 15, bottom = 160;
+  const color  = cfg.color || '#9fd8f5';
+  const liquidTop = cfg.liquidTop;
+  const solid  = cfg.solid || false;
+
+  let ticks = '';
+  for(let i=0;i<labels.length-1;i++){
+    const a = labels[i], b = labels[i+1];
+    for(let k=0;k<subs;k++){
+      const y = a.y + (b.y - a.y) * k / subs;
+      const major = (k === 0);
+      ticks += `<line x1="45" y1="${y.toFixed(1)}" x2="${major?70:57}" y2="${y.toFixed(1)}"
+                 stroke="#2c3e50" stroke-width="${major?1.7:1}"/>`;
+    }
+  }
+  const last = labels[labels.length-1];
+  ticks += `<line x1="45" y1="${last.y}" x2="70" y2="${last.y}" stroke="#2c3e50" stroke-width="1.7"/>`;
+
+  const lab = labels.map(l =>
+    `<text x="42" y="${l.y+4}" text-anchor="end" font-size="11"
+       fill="#2c3e50" font-family="sans-serif">${l.v}</text>`).join('');
+
+  const liquid = (liquidTop != null)
+    ? `<rect x="45" y="${liquidTop}" width="40" height="${bottom - liquidTop}"
+        fill="${color}" opacity="0.9"/>`
+    : '';
+
+  const solidSvg = solid
+    ? `<path d="M57 140 Q49 124 60 112 Q73 101 79 117 Q85 134 70 141 Q60 147 57 140 Z"
+        fill="#e53935" stroke="#b71c1c" stroke-width="1.5"/>`
+    : '';
+
+  return `<svg viewBox="0 0 120 190" class="fig-svg">
+    <text x="65" y="11" text-anchor="middle" font-size="12" font-weight="bold"
+          fill="#1565c0" font-family="sans-serif">mL</text>
+    ${liquid}
+    ${solidSvg}
+    <rect x="45" y="15" width="40" height="145" rx="3" fill="none"
+          stroke="#2c3e50" stroke-width="2.5"/>
+    <path d="M45 15 L37 7" stroke="#2c3e50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    ${ticks}
+    ${lab}
+    <path d="M30 160 L100 160 L94 177 L36 177 Z" fill="#eceff1"
+          stroke="#2c3e50" stroke-width="2.5" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+/* ---- Figures ---- */
+document.getElementById('fig-lecture').innerHTML = cylinderSVG({
+  labels:[{v:30,y:40},{v:25,y:65},{v:20,y:90},{v:15,y:115},{v:10,y:140}],
+  subs:5,
+  liquidTop:130
+});
+
+document.getElementById('fig-deplacement').innerHTML =
+  cylinderSVG({
+    labels:[{v:50,y:40},{v:40,y:65},{v:30,y:90},{v:20,y:115},{v:10,y:140}],
+    subs:5, liquidTop:115
+  }) +
+  '<div class="arrow">➜</div>' +
+  cylinderSVG({
+    labels:[{v:50,y:40},{v:40,y:65},{v:30,y:90},{v:20,y:115},{v:10,y:140}],
+    subs:5, liquidTop:75, solid:true
+  });
+
+document.getElementById('fig-exercice').innerHTML =
+  cylinderSVG({
+    labels:[{v:60,y:35},{v:40,y:85},{v:20,y:135}],
+    subs:10, liquidTop:110
+  }) +
+  '<div class="arrow">➜</div>' +
+  cylinderSVG({
+    labels:[{v:60,y:35},{v:40,y:85},{v:20,y:135}],
+    subs:10, liquidTop:75, solid:true
+  });
+
+/* ============================================================
+   2. NAVIGATION
+============================================================ */
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.main-section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(btn.dataset.main).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+document.querySelectorAll('.sub-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.sub-section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('sub-'+btn.dataset.sub).classList.add('active');
+  });
+});
+
+/* ============================================================
+   3. OUTILS
+============================================================ */
+function norm(s){
+  return (s||'').toString().toLowerCase().trim()
+    .replace(/³/g,'3').replace(/²/g,'2')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/×/g,'x').replace(/π/g,'pi')
+    .replace(/[^a-z0-9]/g,'');
+}
+
+function toggleAnswer(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+  const btn = el.previousElementSibling.querySelector('.btn-reveal');
+  if(btn){
+    btn.textContent = el.classList.contains('show')
+      ? '🙈 Masquer la solution' : '💡 Afficher la solution';
+  }
+}
+
+/* ============================================================
+   4. VRAI / FAUX
+============================================================ */
+const vfData = [
+  { q:"Le volume d'un corps est l'espace qu'il occupe.", a:true,
+    e:"Exact : le volume est l'espace occupé par un corps (solide, liquide ou gazeux)." },
+  { q:"La capacité est le volume maximal qu'un récipient peut contenir.", a:true,
+    e:"Exact : c'est bien la définition de la capacité." },
+  { q:"L'unité internationale de volume est le litre.", a:false,
+    e:"Faux : l'unité internationale est le mètre cube (m³). Le litre est une unité de capacité." },
+  { q:"1 dm³ correspond à 1 L.", a:true,
+    e:"Exact : 1 dm³ = 1 L." },
+  { q:"1 mL correspond à 1 cm³.", a:true,
+    e:"Exact : 1 mL = 1 cm³." },
+  { q:"Pour mesurer un volume avec précision, on utilise un bécher.", a:false,
+    e:"Faux : pour plus de précision, on utilise l'éprouvette graduée." },
+  { q:"Pour mesurer le volume d'un solide de forme quelconque, on utilise la méthode du déplacement d'eau.", a:true,
+    e:"Exact : on mesure V₁ (eau seule) puis V₂ (eau + solide) et on calcule V = V₂ − V₁." },
+  { q:"Le volume d'un cube d'arête c se calcule par V = c × c × c.", a:true,
+    e:"Exact : V = c³." },
+  { q:"Pour lire correctement le volume d'un liquide, l'œil doit être placé au-dessus de l'éprouvette.", a:false,
+    e:"Faux : l'œil doit être placé au même niveau que la surface libre du liquide (pour éviter l'erreur de parallaxe)." }
+];
+
+(function renderVF(){
+  const box = document.getElementById('vf-list');
+  vfData.forEach((item,i)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-text"><span class="q-num">${i+1}</span>${item.q}</div>
+      <div class="vf-btns">
+        <button class="btn-vf" data-v="true">✔ Vrai</button>
+        <button class="btn-vf" data-v="false">✘ Faux</button>
+      </div>
+      <div class="feedback"></div>`;
+    box.appendChild(card);
+
+    const fb = card.querySelector('.feedback');
+    card.querySelectorAll('.btn-vf').forEach(b=>{
+      b.addEventListener('click',()=>{
+        const chosen = (b.dataset.v === 'true');
+        const ok = (chosen === item.a);
+        card.querySelectorAll('.btn-vf').forEach(x=>{
+          x.disabled = true;
+          const isRight = ((x.dataset.v === 'true') === item.a);
+          x.classList.add(isRight ? 'ok' : 'ko');
+        });
+        fb.className = 'feedback show ' + (ok ? 'good' : 'bad');
+        fb.innerHTML = (ok ? '✅ Bravo ! ' : '❌ Pas tout à fait. ') + item.e;
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   5. QCM
+============================================================ */
+const qcmData = [
+  { q:"L'unité internationale de volume est :",
+    o:["le litre","le mètre cube","le millilitre"], c:1,
+    e:"L'unité internationale de volume est le mètre cube (m³)." },
+  { q:"Le symbole du mètre cube est :",
+    o:["m²","m3","m³"], c:2,
+    e:"Le symbole du mètre cube est m³." },
+  { q:"Pour mesurer avec précision le volume d'un liquide, on utilise :",
+    o:["un bécher","une éprouvette graduée","un erlenmeyer"], c:1,
+    e:"L'éprouvette graduée est l'instrument le plus précis parmi ceux cités." },
+  { q:"1 dm³ correspond à :",
+    o:["1 mL","1 L","1 cL"], c:1,
+    e:"1 dm³ = 1 L." },
+  { q:"Dans l'expérience du déplacement d'eau, le volume du solide est :",
+    o:["V₁ + V₂","V₂ − V₁","V₁ − V₂"], c:1,
+    e:"V = V₂ − V₁, où V₁ est le volume d'eau seul et V₂ le volume (eau + solide)." },
+  { q:"Le volume d'un parallélépipède rectangle est :",
+    o:["L × l × h","c × c × c","π × r² × h"], c:0,
+    e:"V = L × l × h (longueur × largeur × hauteur)." },
+  { q:"Le volume d'un cylindre est :",
+    o:["L × l × h","π × r² × h","c × c × c"], c:1,
+    e:"V = π × r² × h avec π = 3,14." },
+  { q:"Avec π = 3,14, le volume d'un cylindre de rayon r = 2 cm et de hauteur h = 10 cm est :",
+    o:["125,6 cm³","62,8 cm³","31,4 cm³"], c:0,
+    e:"V = 3,14 × 2² × 10 = 3,14 × 4 × 10 = 125,6 cm³." },
+  { q:"Sur une éprouvette graduée, on lit le volume au niveau de :",
+    o:["la surface libre du liquide","du fond de l'éprouvette","du bord supérieur de l'éprouvette"], c:0,
+    e:"On lit la graduation qui coïncide avec la surface libre du liquide." }
+];
+
+(function renderQCM(){
+  const box = document.getElementById('qcm-list');
+  qcmData.forEach((item,i)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    let opts = item.o.map((o,k)=>
+      `<button class="btn-opt" data-k="${k}">${String.fromCharCode(97+k)}) ${o}</button>`).join('');
+    card.innerHTML = `
+      <div class="q-text"><span class="q-num">${i+1}</span>${item.q}</div>
+      <div class="qcm-opts">${opts}</div>
+      <div class="feedback"></div>`;
+    box.appendChild(card);
+
+    const fb = card.querySelector('.feedback');
+    card.querySelectorAll('.btn-opt').forEach(b=>{
+      b.addEventListener('click',()=>{
+        const k = parseInt(b.dataset.k,10);
+        const ok = (k === item.c);
+        card.querySelectorAll('.btn-opt').forEach(x=>{
+          x.disabled = true;
+          if(parseInt(x.dataset.k,10) === item.c) x.classList.add('ok');
+          else if(x === b) x.classList.add('ko');
+        });
+        fb.className = 'feedback show ' + (ok ? 'good' : 'bad');
+        fb.innerHTML = (ok ? '✅ Bravo ! ' : '❌ Réponse incorrecte. ') + item.e;
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   6. TEXTE À TROUS
+============================================================ */
+const fillData = [
+  { t:"L'unité internationale de volume est le {mètre cube|metre cube|m3|m³}." },
+  { t:"La {capacité|capacite} est le volume maximal qu'un récipient peut contenir." },
+  { t:"1 L = {1|un} dm³ et 1 mL = {1|un} cm³." },
+  { t:"Pour mesurer avec précision le volume d'un liquide, on utilise une {éprouvette|eprouvette} graduée." },
+  { t:"Pour mesurer le volume d'un solide de forme quelconque, on utilise la méthode du {déplacement|deplacement} d'eau." },
+  { t:"Le volume d'un cube d'arête c est : V = {c x c x c|c×c×c|c*c*c|cxcxc|c3}." },
+  { t:"Le volume d'un cylindre est : V = π × r² × {h}." },
+  { t:"Sur une éprouvette graduée, on lit le volume au niveau de la {surface} libre du liquide." }
+];
+
+(function renderFill(){
+  const box = document.getElementById('fill-list');
+  fillData.forEach((item,i)=>{
+    const parts = item.t.split(/\{|\}/);
+    let html = `<div class="q-text"><span class="q-num">${i+1}</span>`;
+    let idx = 0;
+    parts.forEach((p,k)=>{
+      if(k % 2 === 0){ html += p; }
+      else{
+        idx++;
+        html += `<input class="blank" data-answers="${p}" autocomplete="off">`;
+      }
+    });
+    html += `</div>
+      <div class="row-btns">
+        <button class="btn-check">✔ Vérifier</button>
+        <button class="btn-reveal">💡 Voir la réponse</button>
+      </div>
+      <div class="feedback"></div>`;
+
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = html;
+    box.appendChild(card);
+
+    const fb = card.querySelector('.feedback');
+
+    card.querySelector('.btn-check').addEventListener('click',()=>{
+      const inputs = card.querySelectorAll('.blank');
+      let ok = 0;
+      inputs.forEach(inp=>{
+        const answers = inp.dataset.answers.split('|');
+        const val = norm(inp.value);
+        const good = val !== '' && answers.some(a => norm(a) === val);
+        inp.classList.toggle('ok', good);
+        inp.classList.toggle('ko', !good);
+        if(good) ok++;
+      });
+      if(ok === inputs.length){
+        fb.className = 'feedback show good';
+        fb.textContent = '✅ Parfait, toutes les réponses sont correctes !';
+      }else{
+        fb.className = 'feedback show bad';
+        fb.textContent = `❌ ${ok} / ${inputs.length} correct(s). Corrige les cases en rouge et réessaie.`;
+      }
+    });
+
+    card.querySelector('.btn-reveal').addEventListener('click',()=>{
+      card.querySelectorAll('.blank').forEach(inp=>{
+        inp.value = inp.dataset.answers.split('|')[0];
+        inp.classList.remove('ko');
+        inp.classList.add('ok');
+      });
+      fb.className = 'feedback show info';
+      fb.textContent = '💡 Voici les réponses attendues.';
+    });
+  });
+})();
+
+/* ============================================================
+   7. RÉPONSE COURTE
+============================================================ */
+const shortData = [
+  { q:"Quelle est l'unité internationale de volume ? Donne son nom et son symbole.",
+    a:"Le <strong>mètre cube</strong>, de symbole <strong>m³</strong>." },
+  { q:"Que représente le volume d'un corps ?",
+    a:"Le volume d'un corps est <strong>l'espace qu'il occupe</strong>." },
+  { q:"Quelle est la différence entre le volume et la capacité ?",
+    a:"Le <strong>volume</strong> est l'espace occupé par un corps ; la <strong>capacité</strong> est le volume <strong>maximal</strong> qu'un récipient peut contenir." },
+  { q:"Quel instrument utilise-t-on pour mesurer avec précision le volume d'un liquide ?",
+    a:"L'<strong>éprouvette graduée</strong>." },
+  { q:"Comment appelle-t-on la méthode utilisée pour mesurer le volume d'un solide de forme quelconque ?",
+    a:"La méthode du <strong>déplacement d'eau</strong> (ou déplacement de liquide)." },
+  { q:"Écris la formule du volume d'un cylindre.",
+    a:"<strong>V = π × r² × h</strong> &nbsp;(avec π = 3,14, r le rayon et h la hauteur)." },
+  { q:"Dans une expérience, V₁ = 20 mL et V₂ = 36 mL. Quel est le volume du solide ?",
+    a:"V = V₂ − V₁ = 36 − 20 = <strong>16 mL</strong>." },
+  { q:"Une éprouvette est graduée en mL. Entre 10 mL et 20 mL il y a 5 divisions. Quel est le volume correspondant à une division ?",
+    a:"(20 − 10) ÷ 5 = <strong>2 mL</strong> par division." },
+  { q:"Convertis : 250 mL = ? L",
+    a:"250 mL = <strong>0,25 L</strong> &nbsp;(car 1 L = 1000 mL)." },
+  { q:"Quelles sont les deux étapes à suivre pour mesurer un volume avec une éprouvette graduée ?",
+    a:"1) Déterminer le volume qui correspond à <strong>une division</strong>.<br>2) Déterminer la <strong>graduation qui coïncide avec la surface libre</strong> du liquide." }
+];
+
+(function renderShort(){
+  const box = document.getElementById('short-list');
+  shortData.forEach((item,i)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-text"><span class="q-num">${i+1}</span>${item.q}</div>
+      <div class="row-btns">
+        <button class="btn-reveal">💡 Afficher la réponse</button>
+      </div>
+      <div class="answer-box"><strong>Réponse :</strong> ${item.a}</div>`;
+    box.appendChild(card);
+
+    const btn = card.querySelector('.btn-reveal');
+    const ans = card.querySelector('.answer-box');
+    btn.addEventListener('click',()=>{
+      ans.classList.toggle('show');
+      btn.textContent = ans.classList.contains('show')
+        ? '🙈 Masquer la réponse' : '💡 Afficher la réponse';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
